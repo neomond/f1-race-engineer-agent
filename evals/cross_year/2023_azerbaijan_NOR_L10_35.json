@@ -1,0 +1,218 @@
+{
+  "meta": {
+    "year": 2023,
+    "race": "Azerbaijan",
+    "circuit": "Azerbaijan Grand Prix",
+    "driver": "NOR",
+    "lap_range": [
+      10,
+      35
+    ],
+    "total_laps": 51,
+    "pit_loss_seconds": 21.33,
+    "pit_loss_source": "measured",
+    "model": "Ollama (qwen3:14b, local)",
+    "timestamp": "2026-06-22T17:02:31.338978+00:00"
+  },
+  "calls": [
+    {
+      "lap_number": 10,
+      "message": "Box this lap, box this lap. Undercut window on MAG.",
+      "silent_reason": null,
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:00:59.635797+00:00"
+    },
+    {
+      "lap_number": 11,
+      "message": null,
+      "silent_reason": "premature box recommendation suppressed \u2014 no pit_stop event since last 'box' call",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:01:02.384452+00:00"
+    },
+    {
+      "lap_number": 12,
+      "message": null,
+      "silent_reason": "premature box recommendation suppressed \u2014 no pit_stop event since last 'box' call",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:01:05.134102+00:00"
+    },
+    {
+      "lap_number": 13,
+      "message": null,
+      "silent_reason": "premature box recommendation suppressed \u2014 no pit_stop event since last 'box' call",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:01:08.044301+00:00"
+    },
+    {
+      "lap_number": 14,
+      "message": null,
+      "silent_reason": "premature box recommendation suppressed \u2014 no pit_stop event since last 'box' call",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:01:11.596384+00:00"
+    },
+    {
+      "lap_number": 15,
+      "message": null,
+      "silent_reason": "premature box recommendation suppressed \u2014 no pit_stop event since last 'box' call",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:01:14.688540+00:00"
+    },
+    {
+      "lap_number": 16,
+      "message": "Box this lap, box this lap. Undercut window on HUL.",
+      "silent_reason": null,
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:01:18.567465+00:00"
+    },
+    {
+      "lap_number": 17,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:01:22.273250+00:00"
+    },
+    {
+      "lap_number": 18,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:01:25.954484+00:00"
+    },
+    {
+      "lap_number": 19,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:01:29.659113+00:00"
+    },
+    {
+      "lap_number": 20,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:01:33.361363+00:00"
+    },
+    {
+      "lap_number": 21,
+      "message": null,
+      "silent_reason": "premature box recommendation suppressed \u2014 no pit_stop event since last 'box' call",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:01:37.069890+00:00"
+    },
+    {
+      "lap_number": 22,
+      "message": "Tyre degradation increasing. Box next lap if gap to HUL closes below 1.0.",
+      "silent_reason": null,
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:01:41.055967+00:00"
+    },
+    {
+      "lap_number": 23,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:01:45.064235+00:00"
+    },
+    {
+      "lap_number": 24,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:01:48.851133+00:00"
+    },
+    {
+      "lap_number": 25,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:01:52.645764+00:00"
+    },
+    {
+      "lap_number": 26,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:01:56.435315+00:00"
+    },
+    {
+      "lap_number": 27,
+      "message": "Box this lap. Undercut window on HUL, gap closing.",
+      "silent_reason": null,
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:02:00.197032+00:00"
+    },
+    {
+      "lap_number": 28,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:02:03.925451+00:00"
+    },
+    {
+      "lap_number": 29,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:02:07.666186+00:00"
+    },
+    {
+      "lap_number": 30,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:02:11.383596+00:00"
+    },
+    {
+      "lap_number": 31,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:02:15.112838+00:00"
+    },
+    {
+      "lap_number": 32,
+      "message": null,
+      "silent_reason": "premature box recommendation suppressed \u2014 no pit_stop event since last 'box' call",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:02:18.825884+00:00"
+    },
+    {
+      "lap_number": 33,
+      "message": "Gap to HUL stable at 0.59. Tyres holding, no immediate pit needed.",
+      "silent_reason": null,
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:02:23.160121+00:00"
+    },
+    {
+      "lap_number": 34,
+      "message": "Gap to HUL widening to 1.0. Tyres holding, no immediate pit needed.",
+      "silent_reason": null,
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:02:27.150819+00:00"
+    },
+    {
+      "lap_number": 35,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:02:31.338939+00:00"
+    }
+  ],
+  "events": [
+    {
+      "lap_number": 11,
+      "event_type": "safety_car_start",
+      "description": "Track status: safety_car"
+    },
+    {
+      "lap_number": 14,
+      "event_type": "safety_car_end",
+      "description": "Track status: green (was safety_car)"
+    }
+  ],
+  "summary": {
+    "total_laps_processed": 26,
+    "radio_calls": 6,
+    "silent_laps": 20
+  }
+}

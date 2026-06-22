@@ -1,0 +1,209 @@
+{
+  "meta": {
+    "year": 2024,
+    "race": "Azerbaijan",
+    "circuit": "Azerbaijan Grand Prix",
+    "driver": "NOR",
+    "lap_range": [
+      10,
+      35
+    ],
+    "total_laps": 51,
+    "pit_loss_seconds": 20.56,
+    "pit_loss_source": "measured",
+    "model": "Ollama (qwen3:14b, local)",
+    "timestamp": "2026-06-22T17:04:20.149217+00:00"
+  },
+  "calls": [
+    {
+      "lap_number": 10,
+      "message": "Box this lap, box this lap. Undercut window on Leclerc.",
+      "silent_reason": null,
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:02:37.706848+00:00"
+    },
+    {
+      "lap_number": 11,
+      "message": null,
+      "silent_reason": "premature box recommendation suppressed \u2014 no pit_stop event since last 'box' call",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:02:40.128085+00:00"
+    },
+    {
+      "lap_number": 12,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:02:42.928560+00:00"
+    },
+    {
+      "lap_number": 13,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:02:45.783771+00:00"
+    },
+    {
+      "lap_number": 14,
+      "message": null,
+      "silent_reason": "premature box recommendation suppressed \u2014 no pit_stop event since last 'box' call",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:02:48.931373+00:00"
+    },
+    {
+      "lap_number": 15,
+      "message": null,
+      "silent_reason": "premature box recommendation suppressed \u2014 no pit_stop event since last 'box' call",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:02:52.082183+00:00"
+    },
+    {
+      "lap_number": 16,
+      "message": "Box this lap, box this lap. Undercut window on PER.",
+      "silent_reason": null,
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:02:55.777058+00:00"
+    },
+    {
+      "lap_number": 17,
+      "message": null,
+      "silent_reason": "premature box recommendation suppressed \u2014 no pit_stop event since last 'box' call",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:02:59.687871+00:00"
+    },
+    {
+      "lap_number": 18,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:03:03.351034+00:00"
+    },
+    {
+      "lap_number": 19,
+      "message": null,
+      "silent_reason": "premature box recommendation suppressed \u2014 no pit_stop event since last 'box' call",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:03:07.405954+00:00"
+    },
+    {
+      "lap_number": 20,
+      "message": null,
+      "silent_reason": "premature box recommendation suppressed \u2014 no pit_stop event since last 'box' call",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:03:11.152945+00:00"
+    },
+    {
+      "lap_number": 21,
+      "message": null,
+      "silent_reason": "premature box recommendation suppressed \u2014 no pit_stop event since last 'box' call",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:03:15.157750+00:00"
+    },
+    {
+      "lap_number": 22,
+      "message": "Box this lap. Undercut window on ALB, gap closing.",
+      "silent_reason": null,
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:03:19.293627+00:00"
+    },
+    {
+      "lap_number": 23,
+      "message": null,
+      "silent_reason": "premature box recommendation suppressed \u2014 no pit_stop event since last 'box' call",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:03:23.297497+00:00"
+    },
+    {
+      "lap_number": 24,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:03:27.417265+00:00"
+    },
+    {
+      "lap_number": 25,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:03:31.355567+00:00"
+    },
+    {
+      "lap_number": 26,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:03:35.482508+00:00"
+    },
+    {
+      "lap_number": 27,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:03:39.475512+00:00"
+    },
+    {
+      "lap_number": 28,
+      "message": "Box this lap, box this lap. Undercut window on Verstappen.",
+      "silent_reason": null,
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:03:43.864753+00:00"
+    },
+    {
+      "lap_number": 29,
+      "message": "Overcut favoured. Staying out projects +0.6s gap to VER.",
+      "silent_reason": null,
+      "tools_used": [
+        "simulate_pit_window"
+      ],
+      "timestamp": "2026-06-22T17:03:52.341655+00:00"
+    },
+    {
+      "lap_number": 30,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:03:56.622718+00:00"
+    },
+    {
+      "lap_number": 31,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:04:01.302920+00:00"
+    },
+    {
+      "lap_number": 32,
+      "message": null,
+      "silent_reason": "premature box recommendation suppressed \u2014 no pit_stop event since last 'box' call",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:04:05.926511+00:00"
+    },
+    {
+      "lap_number": 33,
+      "message": null,
+      "silent_reason": "premature box recommendation suppressed \u2014 no pit_stop event since last 'box' call",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:04:10.113395+00:00"
+    },
+    {
+      "lap_number": 34,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:04:14.992285+00:00"
+    },
+    {
+      "lap_number": 35,
+      "message": "Box this lap, box this lap. Undercut window on RUS.",
+      "silent_reason": null,
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:04:20.148877+00:00"
+    }
+  ],
+  "events": [],
+  "summary": {
+    "total_laps_processed": 26,
+    "radio_calls": 6,
+    "silent_laps": 20
+  }
+}

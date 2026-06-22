@@ -1,0 +1,207 @@
+{
+  "meta": {
+    "year": 2025,
+    "race": "Azerbaijan",
+    "circuit": "Azerbaijan Grand Prix",
+    "driver": "NOR",
+    "lap_range": [
+      10,
+      35
+    ],
+    "total_laps": 51,
+    "pit_loss_seconds": 19.53,
+    "pit_loss_source": "measured",
+    "model": "Ollama (qwen3:14b, local)",
+    "timestamp": "2026-06-22T17:06:10.585425+00:00"
+  },
+  "calls": [
+    {
+      "lap_number": 10,
+      "message": "Box this lap, box this lap. Undercut window on Leclerc.",
+      "silent_reason": null,
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:04:26.622159+00:00"
+    },
+    {
+      "lap_number": 11,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:04:29.081955+00:00"
+    },
+    {
+      "lap_number": 12,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:04:31.872104+00:00"
+    },
+    {
+      "lap_number": 13,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:04:35.082075+00:00"
+    },
+    {
+      "lap_number": 14,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:04:38.968440+00:00"
+    },
+    {
+      "lap_number": 15,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:04:42.912864+00:00"
+    },
+    {
+      "lap_number": 16,
+      "message": "Box this lap, box this lap. Undercut window on Leclerc.",
+      "silent_reason": null,
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:04:47.250665+00:00"
+    },
+    {
+      "lap_number": 17,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:04:51.662053+00:00"
+    },
+    {
+      "lap_number": 18,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:04:56.031564+00:00"
+    },
+    {
+      "lap_number": 19,
+      "message": null,
+      "silent_reason": "premature box recommendation suppressed \u2014 no pit_stop event since last 'box' call",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:05:00.556998+00:00"
+    },
+    {
+      "lap_number": 20,
+      "message": null,
+      "silent_reason": "premature box recommendation suppressed \u2014 no pit_stop event since last 'box' call",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:05:04.956121+00:00"
+    },
+    {
+      "lap_number": 21,
+      "message": null,
+      "silent_reason": "premature box recommendation suppressed \u2014 no pit_stop event since last 'box' call",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:05:09.161120+00:00"
+    },
+    {
+      "lap_number": 22,
+      "message": "Box this lap, box this lap. Undercut window on TSU.",
+      "silent_reason": null,
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:05:13.649845+00:00"
+    },
+    {
+      "lap_number": 23,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:05:18.038014+00:00"
+    },
+    {
+      "lap_number": 24,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:05:22.496355+00:00"
+    },
+    {
+      "lap_number": 25,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:05:26.928742+00:00"
+    },
+    {
+      "lap_number": 26,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:05:31.331479+00:00"
+    },
+    {
+      "lap_number": 27,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:05:35.825014+00:00"
+    },
+    {
+      "lap_number": 28,
+      "message": "Box this lap. Undercut window on TSU, gap closing.",
+      "silent_reason": null,
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:05:40.282154+00:00"
+    },
+    {
+      "lap_number": 29,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:05:44.661260+00:00"
+    },
+    {
+      "lap_number": 30,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:05:48.834515+00:00"
+    },
+    {
+      "lap_number": 31,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:05:53.126843+00:00"
+    },
+    {
+      "lap_number": 32,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:05:57.906596+00:00"
+    },
+    {
+      "lap_number": 33,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:06:02.181164+00:00"
+    },
+    {
+      "lap_number": 34,
+      "message": "Box this lap. Undercut window on TSU, gap closing.",
+      "silent_reason": null,
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:06:06.361905+00:00"
+    },
+    {
+      "lap_number": 35,
+      "message": null,
+      "silent_reason": "repeat of recent call (auto-converted)",
+      "tools_used": [],
+      "timestamp": "2026-06-22T17:06:10.585172+00:00"
+    }
+  ],
+  "events": [],
+  "summary": {
+    "total_laps_processed": 26,
+    "radio_calls": 5,
+    "silent_laps": 21
+  }
+}
