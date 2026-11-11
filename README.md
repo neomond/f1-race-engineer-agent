@@ -20,70 +20,184 @@ This isn't a chatbot. It's a tool-using agent with measured pit-loss values, fit
 
 ---
 
+
+
 ## Why this project
 
 I'm targeting F1 strategy and machine-learning engineering roles. The closest publicly buildable analog to that work is an agent that processes live timing data, invokes physics-aware tools, and makes the kinds of calls a real race engineer makes. This project demonstrates: time-series analysis from real telemetry, regression-based modelling with appropriate model selection, tool-using LLM architecture, multi-provider abstraction, and the kind of defensive engineering that production strategy software requires.
 
 ---
 
+
+
 ## Headline result: cross-year pit-loss measurement
 
 The strongest quantitative output of this project. Pit loss is measured directly from each race's actual stops using a baseline-subtraction method (`src/tools/pit_loss.py`), trimmed for outliers, and used by the strategy simulator instead of a hardcoded constant.
 
-| Year | Race | Measured pit loss | Source |
-|---|---|---|---|
-| 2023 | Azerbaijan GP | 21.33s | 17 sampled stops |
-| 2024 | Azerbaijan GP | 20.56s | 17 sampled stops |
-| 2025 | Azerbaijan GP | 19.53s | 14 sampled stops |
+
+| Year | Race          | Measured pit loss | Source           |
+| ---- | ------------- | ----------------- | ---------------- |
+| 2023 | Azerbaijan GP | 21.33s            | 17 sampled stops |
+| 2024 | Azerbaijan GP | 20.56s            | 17 sampled stops |
+| 2025 | Azerbaijan GP | 19.53s            | 14 sampled stops |
+
 
 **Spread: 1.80s.** Three years, same circuit, independent samples, no parameter tuning between years. The measurement converges within a tight band — consistent with the documented small reductions in F1 pit-lane speed regulations and stop quality improvements year-on-year. This is a directly measurable engineering result; it would have been wrong to hardcode it as a constant.
 
 ---
 
+
+
 ## Architecture
 
-```
-                 ┌──────────────────────────────────────┐
-                 │   FastF1  (real F1 timing data)      │
-                 └──────────────┬───────────────────────┘
-                                │
-                  ┌─────────────▼─────────────┐
-                  │  RaceData                 │
-                  │  - laps, weather, results │
-                  │  - measured pit loss      │
-                  │  - current-stint accessor │
-                  └─────────────┬─────────────┘
-                                │
-   ┌────────────────────────────┼────────────────────────────┐
-   │                            │                            │
-┌──▼──────────┐         ┌───────▼────────┐          ┌────────▼────────┐
-│ LapContext  │         │  Tools         │          │  RaceReplayer   │
-│ - position  │         │  - compare_pace│          │  yields lap     │
-│ - gaps      │         │  - pit_window  │          │  contexts in    │
-│ - tyres     │         │  - tyre_deg    │          │  sequence       │
-│ - weather   │         │  - stay_silent │          └────────┬────────┘
-└──────┬──────┘         └────────┬───────┘                   │
-       │                         │                           │
-       └────────────┬────────────┴───────────────────────────┘
-                    │
-        ┌───────────▼──────────────┐         ┌──────────────────────────┐
-        │  RaceEngineerAgent       │◀────────│  AgentMemory             │
-        │  - per-lap step()        │         │  - last N lap contexts   │
-        │  - tool dispatch         │         │  - last N radio calls    │
-        │  - 3 safety nets         │         │  - pinned race events    │
-        └────────────┬─────────────┘         └──────────────────────────┘
-                     │
-        ┌────────────▼──────────────────┐
-        │ LLMClient   (abstract)        │
-        ├────────────┬──────────────────┤
-        │ GeminiClient   OllamaClient   │
-        │ (cloud)        (local)        │
-        └───────────────────────────────┘
+This is a **historical-replay agent**, not a live dashboard. FastF1 loads a past Grand Prix (race session only); `RaceReplayer` feeds one `LapContext` at a time with no future laps; the LLM may call tools; the loop emits a radio call or silence; JSON logs feed a Markdown comparison report.
+
+Default target: Azerbaijan GP, driver `NOR`. The same unchanged agent is validated on 2023, 2024, and 2025.
+
+The provider-agnostic `LLMClient` interface is the architectural keystone. The agent loop, memory, tools, and tests don't know which model is reasoning. Adding a new provider is one file.
+
+### End-to-end flow
+
+```mermaid
+flowchart TD
+  subgraph ingest [Data ingest]
+    FastF1[FastF1 session R]
+    Cache[disk cache data/cache]
+    RaceData[RaceData]
+    PitLoss[estimate_pit_loss]
+    FastF1 --> Cache --> RaceData
+    RaceData --> PitLoss
+  end
+
+  subgraph replay [Lap replay]
+    Replayer[RaceReplayer]
+    LapCtx[LapContext snapshot]
+    Replayer --> LapCtx
+  end
+
+  RaceData --> Replayer
+
+  subgraph agentTick [Per-lap agent tick]
+    Memory[AgentMemory]
+    Prompt[system plus memory plus CURRENT LAP]
+    LLM[LLMClient generate]
+    Tools{wants tools?}
+    Dispatch[dispatch_tool]
+    Silent[stay_silent]
+    Text[extract radio call]
+    Guard1[repetition Jaccard]
+    Guard2[pit cooldown]
+    Radio[RadioCall spoken or silent]
+    Memory --> Prompt
+    LapCtx --> Memory
+    LapCtx --> Prompt
+    Prompt --> LLM
+    LLM --> Tools
+    Tools -->|yes| Dispatch
+    Dispatch -->|stay_silent| Silent --> Radio
+    Dispatch -->|other tools| LLM
+    Tools -->|no text| Text --> Guard1 --> Guard2 --> Radio
+    Radio --> Memory
+  end
+
+  subgraph llmProviders [Providers]
+    Gemini[GeminiClient]
+    Ollama[OllamaClient]
+    LLM -.-> Gemini
+    LLM -.-> Ollama
+  end
+
+  subgraph evals [Eval]
+    JSON[evals JSON logs]
+    Report[compare_years Markdown]
+    Radio --> JSON --> Report
+  end
 ```
 
-The provider-agnostic `LLMClient` interface is the architectural keystone. The agent loop, memory, tools, and tests don't know which model is reasoning. Adding a new provider (Claude, Mistral, Llama via API) is one file.
+
+
+
+
+### Per-lap decision loop
+
+```mermaid
+sequenceDiagram
+  participant R as RaceReplayer
+  participant A as RaceEngineerAgent
+  participant M as AgentMemory
+  participant L as LLMClient
+  participant T as Tool registry
+
+  R->>A: LapContext this lap only
+  A->>M: record_lap detect pit SC stint
+  A->>L: generate system plus state plus tools
+  alt model calls tools
+    L-->>A: ToolCall list
+    alt stay_silent
+      A->>M: silent RadioCall
+    else compare_pace or pit_window or tyre_deg
+      A->>T: dispatch_tool RaceData plus lap
+      T-->>A: JSON result
+      A->>L: tool result continue up to 4 iters
+    end
+  else model returns text
+    A->>A: extract quoted radio call
+    A->>A: Jaccard vs last 3 calls
+    A->>A: box cooldown unless pit_stop event
+    A->>M: spoken or auto-silent RadioCall
+  end
+```
+
+
+
+
+
+### Tools the model can invoke
+
+```mermaid
+flowchart LR
+  Agent[RaceEngineerAgent]
+  Agent --> Pace[compare_pace]
+  Agent --> Pit[simulate_pit_window]
+  Agent --> Deg[get_tyre_degradation]
+  Agent --> Quiet[stay_silent]
+  Pace --> RaceData[RaceData laps]
+  Pit --> RaceData
+  Deg --> RaceData
+```
+
+
+
+Safety nets after a spoken call: prompt rules; Jaccard token similarity ≥ 0.75 vs the last 3 calls; pit-recommendation cooldown of 5 laps unless a `pit_stop` event was recorded. Max 4 tool iterations per lap.
 
 ---
+
+
+
+## Implemented vs remaining
+
+
+| Layer                                                                                    | Status                                                               |
+| ---------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| FastF1 race load, measured pit loss, `LapContext`, `RaceReplayer`                        | Done (race session `"R"` only)                                       |
+| Four tools: `compare_pace`, `simulate_pit_window`, `get_tyre_degradation`, `stay_silent` | Done                                                                 |
+| Provider-agnostic loop + Gemini 2.5 Flash + Ollama                                       | Done                                                                 |
+| Memory (last 5 laps / 5 calls, pinned pit/SC/stint events)                               | Done                                                                 |
+| Three behavioural defences + radio-call extraction                                       | Done                                                                 |
+| CLI runners + cross-year JSON logs + Markdown report                                     | Done (2023–2025 Baku, laps 10–35)                                    |
+| Unit tests (~131 `test_*` functions)                                                     | Done                                                                 |
+| Fuel-correction term in tyre degradation                                                 | Remaining (8-lap window is the workaround)                           |
+| Streamlit dashboard                                                                      | Remaining (listed in `requirements.txt`, no app)                     |
+| Live timing                                                                              | Remaining (`LapContext` is shaped for it; replay is historical only) |
+| Anomaly-detection tool                                                                   | Remaining (not in this repo)                                         |
+| Practice / qualifying sessions                                                           | Remaining                                                            |
+| Predictive strategy (SC probability, Monte Carlo)                                        | Remaining                                                            |
+| Baku 2026 re-validation                                                                  | Remaining (CLI already accepts the year)                             |
+
+
+---
+
+
 
 ## Key engineering decisions
 
@@ -131,7 +245,11 @@ The cross-year framework (`src/run_cross_year.py` + `src/compare_years.py`) runs
 
 ---
 
+
+
 ## Sample radio calls
+
+
 
 ### 2024 Baku, laps 21–25 (Gemini 2.5 Flash)
 
@@ -170,6 +288,8 @@ L22 is a conditional call grounded in the tyre fitter's output. L27 escalates as
 
 ---
 
+
+
 ## Known limitations
 
 Honest engineering means listing the things that aren't quite right yet:
@@ -180,6 +300,8 @@ Honest engineering means listing the things that aren't quite right yet:
 - **Only the race session is loaded.** Free practice and qualifying data would improve pit-loss estimates and tyre-degradation priors. Not in scope for v1.
 
 ---
+
+
 
 ## What's in the repo
 
@@ -216,7 +338,11 @@ race-engineer-agent/
 
 ---
 
+
+
 ## Running locally
+
+
 
 ### Requirements
 
@@ -224,6 +350,8 @@ race-engineer-agent/
 - ~500MB disk for the FastF1 cache after first race load
 - For local LLM: [Ollama](https://ollama.com) + `ollama pull qwen3:14b` (~9GB)
 - For cloud LLM: a free [Google AI Studio](https://aistudio.google.com) API key
+
+
 
 ### Setup
 
@@ -234,11 +362,15 @@ pip install -r requirements.txt
 cp .env.example .env             # edit to add API keys if using Gemini
 ```
 
+
+
 ### Verify
 
 ```bash
-python -m pytest tests/ -v       # 129 tests should pass
+python -m pytest tests/ -v       # ~131 tests should pass
 ```
+
+
 
 ### Run
 
@@ -258,9 +390,11 @@ python src/compare_years.py
 
 ---
 
+
+
 ## Test coverage
 
-129 tests, all passing. Notable areas:
+~131 tests, all passing. Notable areas:
 
 - 9 tests for pace comparison (sector deltas, pit-lap filtering, trend detection)
 - 10 tests for pit-window simulation (undercut/overcut symmetry, pit-loss cancellation, emergence gaps)
@@ -277,28 +411,43 @@ Tests run in ~3 seconds end-to-end. No external dependencies needed — every te
 
 ---
 
+
+
 ## Tech stack
 
+**Used in** `src/`
+
 - **Python 3.11+**, type-hinted dataclasses throughout
-- **FastF1** for race data
-- **NumPy / pandas / SciPy** for the math layer
-- **google-genai** SDK for Gemini integration
-- **ollama** SDK for local model integration
+- **FastF1** for race data (laps, weather, race-control messages; telemetry off)
+- **NumPy / pandas** for data wrangling
+- **scikit-learn** (`LinearRegression` / `PolynomialFeatures`) for tyre-degradation OLS and pace-trend slope
+- **google-genai** SDK for Gemini 2.5 Flash
+- **ollama** SDK for local Qwen (`.env` default is `qwen3:8b`; this README often cites `qwen3:14b` for stronger local runs)
+- **python-dotenv** for config
 - **pytest** for the test suite
+
+There is no UI, FastAPI, or database. Persistence is JSON under `evals/`.
+
+**Listed in** `requirements.txt` **but unused in** `src/` (reserved for v2 or leftover from setup): `streamlit`, `matplotlib`, `pydantic`, `scipy`.
 
 ---
 
+
+
 ## What's next
 
-In rough priority order:
+In rough priority order (see **Implemented vs remaining** above):
 
 1. **Re-validate on Baku 2026** when FastF1 publishes the data after the September 23–26 weekend. The runner already supports it — adding the year is one CLI argument.
 2. **Explicit fuel-correction term** in the tyre degradation fitter (mentioned above).
 3. **Anomaly detection tool** wrapping a prior F1 sensor-anomaly project ([github.com/neomond/f1-sensor-anomaly-detection](https://github.com/neomond/f1-sensor-anomaly-detection)) so the agent can flag genuine sensor problems in addition to strategic moments.
 4. **Streamlit dashboard** for live race replay with the agent's calls overlaid.
 5. **Live timing integration** — currently the agent runs on historical data; the lap-context interface is shaped identically to what live timing produces.
+6. **Cleanup** — drop unused requirements, align the Ollama default (8b vs 14b). Extra providers (Claude, Mistral) are mentioned in comments but not implemented.
 
 ---
+
+
 
 ## Contact
 

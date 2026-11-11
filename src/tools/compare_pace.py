@@ -16,8 +16,8 @@ from __future__ import annotations
 from dataclasses import dataclass, asdict
 from typing import Literal, Optional
 
-import numpy as np
 import pandas as pd
+from sklearn.linear_model import LinearRegression
 
 from src.data.race_data import RaceData
 
@@ -201,11 +201,10 @@ def _compute_trend(aligned: pd.DataFrame) -> tuple[Optional[float], str]:
     if len(aligned) < 3:
         return None, "insufficient_data"
 
-    delta = aligned["LapTime_a_s"] - aligned["LapTime_b_s"]
-    laps = aligned["LapNumber"].astype(float)
+    delta = (aligned["LapTime_a_s"] - aligned["LapTime_b_s"]).to_numpy()
+    laps = aligned["LapNumber"].astype(float).to_numpy().reshape(-1, 1)
 
-    # numpy polyfit deg=1 returns [slope, intercept]
-    slope, _ = np.polyfit(laps, delta, 1)
+    slope = float(LinearRegression().fit(laps, delta).coef_[0])
 
     if abs(slope) < _STABLE_TREND_THRESHOLD_S:
         direction = "stable"

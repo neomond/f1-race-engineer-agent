@@ -32,6 +32,9 @@ from typing import Literal, Optional
 
 import numpy as np
 import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import PolynomialFeatures
 
 
 # Need enough laps to fit meaningfully. Linear needs 2 to fit but is unreliable
@@ -195,9 +198,9 @@ def fit_degradation(
     ages = clean["TyreLife"].astype(float).to_numpy()
     times = clean["LapTime_s"].to_numpy()
 
-    # ---- Linear fit -----------------------------------------------------
-    lin_slope, lin_intercept = np.polyfit(ages, times, 1)
-    lin_r2 = _r_squared(times, lin_intercept + lin_slope * ages)
+    # ---- Linear fit (OLS via sklearn) -----------------------------------
+    lin_slope, lin_intercept, lin_pred = _fit_ols(ages, times, degree=1)
+    lin_r2 = _r_squared(times, lin_pred)
     lin_adj_r2 = _adjusted_r_squared(lin_r2, n, k=1)
 
     # ---- Quadratic fit (if we have enough data) -------------------------
@@ -205,10 +208,10 @@ def fit_degradation(
     quad_r2 = None
     quad_adj_r2 = None
     if n >= MIN_LAPS_FOR_QUADRATIC:
-        quad_coeffs = np.polyfit(ages, times, 2)  # [a, b, c]: a*x^2 + b*x + c
-        a, b, c = quad_coeffs
-        predicted = a * ages**2 + b * ages + c
-        quad_r2 = _r_squared(times, predicted)
+        # a*x^2 + b*x + c
+        b, a, c, quad_pred = _fit_ols(ages, times, degree=2)
+        quad_coeffs = (a, b, c)
+        quad_r2 = _r_squared(times, quad_pred)
         quad_adj_r2 = _adjusted_r_squared(quad_r2, n, k=2)
 
     # ---- Pick the better model -----------------------------------------
@@ -354,6 +357,31 @@ def compare_degradation(
 
 
 # ---- Helpers --------------------------------------------------------------
+
+
+def _fit_ols(x: np.ndarray, y: np.ndarray, degree: int):
+    """
+    Ordinary least squares via sklearn.
+
+    degree=1 → (slope, intercept, predictions)
+    degree=2 → (linear_term, quadratic_term, intercept, predictions)
+               matching lap_time ≈ c + b*age + a*age^2
+    """
+    X = x.reshape(-1, 1)
+    if degree == 1:
+        model = LinearRegression().fit(X, y)
+        return float(model.coef_[0]), float(model.intercept_), model.predict(X)
+
+    pipe = make_pipeline(
+        PolynomialFeatures(degree=2, include_bias=False),
+        LinearRegression(),
+    )
+    pipe.fit(X, y)
+    lin: LinearRegression = pipe.named_steps["linearregression"]
+    linear_term, quadratic_term = (float(c) for c in lin.coef_)
+    intercept = float(lin.intercept_)
+    return linear_term, quadratic_term, intercept, pipe.predict(X)
+
 
 
 def _clean_stint(df: pd.DataFrame) -> pd.DataFrame:
